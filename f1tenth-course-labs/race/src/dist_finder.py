@@ -17,7 +17,7 @@ c=0.6
 
 
 # Handle to the publisher that will publish on the error topic, messages of the type 'pid_input'
-pub = rospy.Publisher('/err', pid_input, queue_size=10)
+pub = rospy.Publisher('/error', pid_input, queue_size=10)
 
 
 def getRange(data,angle):
