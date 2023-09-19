@@ -3,15 +3,15 @@ import math
 import rospy
 from race.msg import pid_input
 from ackermann_msgs.msg import AckermannDrive
-from ackermann_msgs.msg import AckermannDriveStamped
+
 
 
 # PID Control Params
 global kp 
-kp = 1.0 
+kp = 0.0 
 #TODO
 global kd
-kd = 1.0
+kd = 0.0
 #TODO
 global ki
 ki = 0.0
@@ -30,7 +30,7 @@ vel_input = 1	#TODO
 
 # Publisher for moving the car. 
 # TODO: Use the coorect topic /car_x/offboard/command.
-command_pub = rospy.Publisher('/drive', AckermannDriveStamped, queue_size = 1)
+command_pub = rospy.Publisher('/car_x/offboard/command', AckermannDrive, queue_size = 1)
 
 def control(data: pid_input):
 	global prev_error
@@ -47,24 +47,15 @@ def control(data: pid_input):
 	
 	# 1. Scale the error
 	# 2. Apply the PID equation on error to compute steering
-	angle = kp*data.pid_error + kd*((prev_error - data.pid_error ))
+	
 	# An empty AckermannDrive message is created. You will populate the steering_angle and the speed fields.
 	command = AckermannDrive()
-	
-	
-	if angle < (-100):
-		angle = -100
-	if angle > 100:
-		angle = 100
 	
 		
 
 	# TODO: Make sure the steering value is within bounds [-100,100]
-	an=command.steering_angle-angle
 	
-	command.steering_angle = an
-	print(an)
-	print("---------------------")
+	
 	
 
 	# TODO: Make sure the velocity is within bounds [0,100]
@@ -73,20 +64,19 @@ def control(data: pid_input):
 	command.acceleration = 0.0
     
 
-	new= AckermannDriveStamped()
-	new.drive=command
+	
 	# Move the car autonomously
-	command_pub.publish(new)
-	prev_error = data.pid_error
+	command_pub.publish(command)
+	
 	
 
 if __name__ == '__main__':
 	
-	#kp = input("Enter Kp Value: ")
-	#kd = input("Enter Kd Value: ")
-	#ki = input("Enter Ki Value: ")
-	#vel_input = input("Enter desired velocity: ")
+	kp = input("Enter Kp Value: ")
+	kd = input("Enter Kd Value: ")
+	ki = input("Enter Ki Value: ")
+	vel_input = input("Enter desired velocity: ")
 	rospy.init_node('pid_controller', anonymous=True)
 	print("PID Control Node is Listening to error")
-	rospy.Subscriber("/err", pid_input, control)
+	rospy.Subscriber("/error", pid_input, control)
 	rospy.spin()
