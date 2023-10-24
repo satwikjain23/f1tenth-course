@@ -16,7 +16,7 @@ kd = 0.0
 global ki
 ki = 0.0
 servo_offset = 0.0	# zero correction offset in case servo is misaligned and has a bias in turning.
-prev_error = 0.0
+
 
  
 # This code can input desired velocity from the user.
@@ -26,7 +26,7 @@ prev_error = 0.0
 # 25: Slow and steady
 # 35: Nice Autonomous Pace
 # > 40: Careful, what you do here. Only use this if your autonomous steering is very reliable.
-vel_input = 1	#TODO
+vel_input = 	#TODO
 
 # Publisher for moving the car. 
 # TODO: Use the coorect topic /car_x/offboard/command.
